@@ -1,0 +1,46 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# THfuncs
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of THfuncs is to hold functions that I have created
+
+## Installation
+
+You can install the development version of THfuncs like so:
+
+``` r
+# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```
+S
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(THfuncs)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+
