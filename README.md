@@ -6,35 +6,22 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of THfuncs is to hold functions that I have created
+The goal of THfuncs is to hold functions that I have created.
+
+The first function is a summary percentages function, produced originally for equalities analysis in the Higher Education Analysis team. The function summarises wide data by give protected groups and characteristics, taking account of unknown values (NAs) and different sample sets. 
 
 ## Installation
 
-You can install the development version of THfuncs like so:
+You can install the development version of THfuncs like so
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
+library(devtools)
 
-S \## Example
+devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
 
-This is a basic example which shows you how to solve a common problem:
-
-``` r
 library(THfuncs)
-## basic example code
+
+?prop_in_group()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
 ```
