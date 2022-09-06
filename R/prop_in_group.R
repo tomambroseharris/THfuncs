@@ -1,10 +1,10 @@
 #' @title Summarise the proportions of a df /population which fall in each of n categories
 #' @description This function can be used on wide-form data frames to summarise the proportion of rows, instances or of a total, which exhibits each of the characteristics fed into the function. Each subgroup /characeteristic must be a column in the data frame
-#' @param input_df an input data frame
-#' @param value_col the population values to be counted or summed
-#' @param breakdowns_vector a vector containing the column names of each group to see the proportion for
-#' @param group_by_col an additional layer of grouping, if required, to see a broader subset
-#' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
+#' @param input_df an input data frame.
+#' @param value_col the population values to be counted or summed.
+#' @param breakdowns_vector a vector containing the column names of each group to see the proportion for.
+#' @param group_by_col an additional layer of grouping, if required, to see a broader subset.
+#' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column.
 #' @export
 #' @return NULL
 
