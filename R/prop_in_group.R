@@ -1,5 +1,5 @@
-#' @title Summarise the proportions of a df /population which fall in each of n categories
-#' @description This function can be used on wide-form data frames to summarise the proportion of rows, instances or of a total, which exhibits each of the characteristics fed into the function. Each subgroup /characeteristic must be a column in the data frame
+#' @title <Function for props>
+#' @description <full descrip>
 #' @param input_df an input data frame.
 #' @param value_col the population values to be counted or summed.
 #' @param breakdowns_vector a vector containing the column names of each group to see the proportion for.
@@ -10,10 +10,12 @@
 
 
 prop_in_group <- function(input_df,
-                          value_col,
-                          breakdowns_vector,
-                          group_by_col = NULL,
-                          knowns_treatment = "sum"){
+                                      value_col,
+                                      breakdowns_vector,
+                                      group_by_col = NULL,
+                                      knowns_treatment = "sum"){
+  #Summarise the proportions of a df /population which fall in each of n categories
+  # This function can be used on wide-form data frames to summarise the proportion of rows, instances or of a total, which exhibits each of the characteristics fed into the function. Each subgroup /characeteristic must be a column in the data frame
 
   # load necessary complimentary packages
   if (!require("pacman")) install.packages("pacman")
@@ -66,35 +68,35 @@ prop_in_group <- function(input_df,
   for(i in breakdowns_vector){
     
     
-# run some if loops, depending on how we want to count (or sum) unknown / known values.
-# the input to knowns_treatment will affect this
-if(knowns_treatment == "sum"){    
-
+  # run some if loops, depending on how we want to count (or sum) unknown / known values.
+  # the input to knowns_treatment will affect this
+  if(knowns_treatment == "sum"){    
+  
+      # extract a single number for the total KNOWN values
+      Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
+        summarise(Total_value = sum({{value_col}})) %>%
+        pull()
+  
+      # extract a single number for the total UNKNOWN values
+      Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
+        summarise(Total_value = sum({{value_col}})) %>%
+        pull()
+  
+  } else if (knowns_treatment == "count"){
+    
     # extract a single number for the total KNOWN values
     Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
-      summarise(Total_value = sum({{value_col}})) %>%
+      summarise(Total_value = nrow(.)) %>%
       pull()
-
+    
     # extract a single number for the total UNKNOWN values
     Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
-      summarise(Total_value = sum({{value_col}})) %>%
+      summarise(Total_value = nrow(.)) %>%
       pull()
-
-} else if (knowns_treatment == "count"){
-  
-  # extract a single number for the total KNOWN values
-  Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
-    summarise(Total_value = nrow(.)) %>%
-    pull()
-  
-  # extract a single number for the total UNKNOWN values
-  Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
-    summarise(Total_value = nrow(.)) %>%
-    pull()
-  
-} else {
-  stop("Acceptable inputs for knowns_treatment are 'sum' or 'count'; the default is 'sum'.")
-}
+    
+  } else {
+    stop("Acceptable inputs for knowns_treatment are 'sum' or 'count'; the default is 'sum'.")
+  }
 
 
     # extract the column that will be used to pivot_wider below. This cannot be nested in the pivotwider function itself
