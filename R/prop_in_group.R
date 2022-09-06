@@ -60,7 +60,7 @@ prop_in_group <- function(input_df,
   # create a binding data frame from the empty data frame
   binding_df <- empty_df %>%
     # select the columns in the order that they are wanted for presentation purposes
-    dplyr::select(Grouping, Characteristic, 1:all_of(empty_df_ncols))
+    dplyr::select(Grouping, Subgroup, 1:all_of(empty_df_ncols))
 
   # run a loop around each of the elements in the breakdowns_vector to create summary tables
 
