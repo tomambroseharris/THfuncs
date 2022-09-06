@@ -1,23 +1,18 @@
-#' @title <Function for props>
+#' @title <Function for Proportions>
 #' @description <full descrip>
-#' @param input_df an input data frame.
-#' @param value_col the population values to be counted or summed.
-#' @param breakdowns_vector a vector containing the column names of each group to see the proportion for.
-#' @param group_by_col an additional layer of grouping, if required, to see a broader subset.
-#' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column.
+#' @param input_df an input data frame
+#' @param value_col values
+#' @param breakdowns_vector descrip
+#' @param group_by_col desc
 #' @export
 #' @return NULL
 
 
 prop_in_group <- function(input_df,
-                                      value_col,
-                                      breakdowns_vector,
-                                      group_by_col = NULL,
-                                      knowns_treatment = "sum"){
-  #Summarise the proportions of a df /population which fall in each of n categories
-  # This function can be used on wide-form data frames to summarise the proportion of rows, instances or of a total, which exhibits each of the characteristics fed into the function. Each subgroup /characeteristic must be a column in the data frame
+                                     value_col,
+                                     breakdowns_vector,
+                                     group_by_col = NULL){
 
-  # load necessary complimentary packages
   if (!require("pacman")) install.packages("pacman")
   #This loads the packages within the p_load function
   pacman::p_load(dplyr,
@@ -25,22 +20,26 @@ prop_in_group <- function(input_df,
                  tidyverse,
                  janitor)
 
-  # if there is not an additional group_by column, create a column for all rows
+
   if(missing(group_by_col)){
 
     input_df <- input_df %>%
       mutate(All = "All")
 
-    # assign the group_by col
     group_by_col <- as.name("All")
   }
 
-  # select the unique inputs in the group_by column
-  # if this is automatically assigned as "All", then "All" will be the only thing extracted
+
+
+
+
   unique_in_group <- input_df %>%
     dplyr::select({{group_by_col}}) %>%
     unique() %>%
     pull()
+
+
+
 
 
   # create an empty data frame: this is a df with all the headings needed in the output table, but with no rows
@@ -48,7 +47,7 @@ prop_in_group <- function(input_df,
   # to understand for QA purposes, you could run: unique_in_group %>% purrr::map_dfc(~tibble::tibble(!!.x := logical())) with unique_in_group as any vector
   empty_df <- unique_in_group %>% purrr::map_dfc(~tibble::tibble(!!.x := logical())) %>%
     # there are additional columns included in the final table that do not come from the grouping column.
-    # These are Grouping, Subgroup, `Known in Group` and Unknowns.
+    # These are Grouping, Characteristic, `Known in Group` and Unknowns.
     # The add_column() function makes columns with the correct data structure for what will eventually be bound to them
     add_column(Grouping = as.character(),
                Subgroup = as.character(),
@@ -61,51 +60,32 @@ prop_in_group <- function(input_df,
   # create a binding data frame from the empty data frame
   binding_df <- empty_df %>%
     # select the columns in the order that they are wanted for presentation purposes
-    dplyr::select(Grouping, Characteristic, 1:all_of(empty_df_ncols))
+    dplyr::select(Grouping, Subgroup, 1:all_of(empty_df_ncols))
 
   # run a loop around each of the elements in the breakdowns_vector to create summary tables
 
   for(i in breakdowns_vector){
-    
-    
-  # run some if loops, depending on how we want to count (or sum) unknown / known values.
-  # the input to knowns_treatment will affect this
-  if(knowns_treatment == "sum"){    
-  
-      # extract a single number for the total KNOWN values
-      Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
-        summarise(Total_value = sum({{value_col}})) %>%
-        pull()
-  
-      # extract a single number for the total UNKNOWN values
-      Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
-        summarise(Total_value = sum({{value_col}})) %>%
-        pull()
-  
-  } else if (knowns_treatment == "count"){
-    
-    # extract a single number for the total KNOWN values
+
+    # extract a single number for the total KNOWN FPE
     Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
-      summarise(Total_value = nrow(.)) %>%
+      summarise(Total_value = sum({{value_col}})) %>%
       pull()
-    
-    # extract a single number for the total UNKNOWN values
+
+    # extract a single number for the total UNKNOWN FPE
     Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
-      summarise(Total_value = nrow(.)) %>%
+      summarise(Total_value = sum({{value_col}})) %>%
       pull()
-    
-  } else {
-    stop("Acceptable inputs for knowns_treatment are 'sum' or 'count'; the default is 'sum'.")
-  }
+
+
 
 
     # extract the column that will be used to pivot_wider below. This cannot be nested in the pivotwider function itself
     pivot_col <- deparse(substitute(group_by_col))
 
-    # create a summary table for the subgroup i
+    # create a summary table for the characteristic i
     Char_Summary <- input_df %>%
       filter(!is.na(!!as.name(i))) %>% # remove unknowns
-      group_by(!!as.name(i), {{group_by_col}}) %>% # group by the subgroup (i) and the grouping column defined in the function
+      group_by(!!as.name(i), {{group_by_col}}) %>% # group by the characteristic (i) and the grouping column defined in the function
       summarise(Total = sum({{value_col}}), .groups = "drop") %>% # summarise the total FPE in those characteristics
       pivot_wider(names_from = all_of(pivot_col), values_from = "Total") %>% #pivot wider, leaving the characteristics as a column and creating new columns out of all the unique variables in the group_col
       adorn_totals("row") # add a total row to the bottom of the df
@@ -120,7 +100,7 @@ prop_in_group <- function(input_df,
       filter(!!as.name(i) != "Total") %>% # remove the total row from the bottom of the df (this will have the value 1 in it, because it's just been divided by itself)
       mutate(`Known in Group` = Char_Total, # add a known total row. Assign all rows the value extracted above: the total FPE when filtering out unknowns
              Unknowns = Char_Unknown, # do as above for unknowns
-             Grouping = i)  # create a grouping column filled with whatever subgroup (i) is being grouped by in this loop
+             Grouping = i)  # create a grouping column filled with whatever characteristic (i) is being grouped by in this loop
 
     # count the number of columns in the summary table
     # this is identical to empty_df_ncols above, but do it again here because it's clearer
@@ -141,6 +121,8 @@ prop_in_group <- function(input_df,
     # for each subsequent one, it will have the previous Char_Summary tables already bound above
     binding_df <- binding_df %>%
       bind_rows(Char_Summary)
+
+
 
   }
 

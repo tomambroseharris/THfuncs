@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of THfuncs is to hold functions that I have created. These are intended to serve various purposes to make data analysis, data manipulation and other analytical outputs easier to accomplish. 
+The goal of THfuncs is to hold functions that I have created.
 
 The first function is a summary percentages function, produced originally for equalities analysis in the Higher Education Analysis team. The function summarises wide data by give protected groups and characteristics, taking account of unknown values (NAs) and different sample sets.
 
@@ -28,7 +28,6 @@ You can install the development version of THfuncs like so:
 
 
 ```{r, eval=FALSE}
-install.packages("devtools")
 library(devtools)
 
 devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
