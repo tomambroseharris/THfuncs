@@ -1,4 +1,4 @@
-#' @title <Function for Proportions>
+#' @title <Function for Proportions test>
 #' @description <full descrip>
 #' @param input_df an input data frame
 #' @param value_col values
