@@ -2,19 +2,16 @@
 % Please edit documentation in R/prop_in_group.R
 \name{prop_in_group}
 \alias{prop_in_group}
-\title{<Function for Proportions>}
+\title{Title}
 \usage{
 prop_in_group(input_df, value_col, breakdowns_vector, group_by_col = NULL)
 }
 \arguments{
-\item{input_df}{an input data frame}
+\item{group_by_col}{}
+}
+\value{
 
-\item{value_col}{values}
-
-\item{breakdowns_vector}{descrip}
-
-\item{group_by_col}{desc}
 }
 \description{
-<full descrip>
+Title
 }

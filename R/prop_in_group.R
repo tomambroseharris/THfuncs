@@ -1,12 +1,14 @@
-#' @title <Function for Proportions>
-#' @description <full descrip>
-#' @param input_df an input data frame
-#' @param value_col values
-#' @param breakdowns_vector descrip
-#' @param group_by_col desc
+#' Title
+#'
+#' @param input_df
+#' @param value_col
+#' @param breakdowns_vector
+#' @param group_by_col
+#'
+#' @return
 #' @export
-#' @return NULL
-
+#'
+#' @examples
 
 prop_in_group <- function(input_df,
                                      value_col,
