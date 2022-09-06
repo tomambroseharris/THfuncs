@@ -2,16 +2,30 @@
 % Please edit documentation in R/prop_in_group.R
 \name{prop_in_group}
 \alias{prop_in_group}
-\title{Title}
+\title{Summarise the proportions of a df (population) which fall in each of n categories}
 \usage{
-prop_in_group(input_df, value_col, breakdowns_vector, group_by_col = NULL)
+prop_in_group(
+  input_df,
+  value_col,
+  breakdowns_vector,
+  group_by_col = NULL,
+  knowns_treatment = "sum"
+)
 }
 \arguments{
-\item{group_by_col}{}
+\item{input_df}{an input data frame}
+
+\item{value_col}{the population values to be counted or summed}
+
+\item{breakdowns_vector}{a vector containing the column names of each group to see the proportion for}
+
+\item{group_by_col}{an additional layer of grouping, if required, to see a broader subset}
+
+\item{knowns_treatment}{inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column}
 }
 \value{
-
+The output from the function
 }
 \description{
-Title
+Summarise the proportions of a df (population) which fall in each of n categories
 }
