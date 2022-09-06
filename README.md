@@ -40,10 +40,8 @@ output <- prop_in_group(input_df = iris,
 
 ```
 
-```{r, echo = FALSE}
-library(kableExtra)
-kable(https://github.com/tomambroseharris/THfuncs/files/9499011/test_prop.csv)
-
-```
-This creates the output contained below
+This creates the output contained in this table:
 [test_prop.csv](https://github.com/tomambroseharris/THfuncs/files/9499011/test_prop.csv)
+
+The proportion of total petal length that is contained in each species is split by the example group: short and long petal lengths, the mutate() assignment for which can be seen above. 
+
