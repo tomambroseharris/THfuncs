@@ -18,29 +18,25 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of THfuncs is to hold functions that I have created
+The goal of THfuncs is to hold functions that I have created.
+
+The first function is a summary percentages function, produced originally for equalities analysis in the Higher Education Analysis team. The function summarises wide data by give protected groups and characteristics, taking account of unknown values (NAs) and different sample sets.
 
 ## Installation
 
 You can install the development version of THfuncs like so:
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
-S
-## Example
 
-This is a basic example which shows you how to solve a common problem:
+```{r, eval=FALSE}
+library(devtools)
 
-```{r example}
+devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
+
 library(THfuncs)
-## basic example code
+
+?prop_in_group()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
 
 
