@@ -32,6 +32,14 @@ data("iris")
 iris
 iris <- iris %>% mutate(example_group = if_else(Petal.Length > 4, "long", "short"))
 
+```
+
+The output looks like this
+```{r, echo = F}
+library(magrittr)
+iris_table <- tibble::tribble(~`Sepal.Length` ~`Sepal.Width` ~`Petal.Length` ~`Petal.Width`    ~`Species`,
+"1", "2", "3", "4", "5")
+
 output <- prop_in_group(input_df = iris,
               value_col = Petal.Length,
               breakdowns_vector = c("Species"),
