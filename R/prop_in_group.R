@@ -1,20 +1,21 @@
 #' Summarise the proportions of a df (population) which fall in each of n categories
-#'
+#' @description produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
 #' @param input_df an input data frame
-#' @param value_col the population values to be counted or summed
 #' @param breakdowns_vector a vector containing the column names of each group to see the proportion for
+#' @param value_col the population values to be summed. If the purpose is to count rows, leave this blank blank.
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
 #'
-#' @return The output from the function
+#' @return The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
+#' @seealso [function documentation](https://github.com/tomambroseharris/THfuncs)
 #' @export
 #'
 #'
 prop_in_group <- function(input_df,
-                          value_col,
                           breakdowns_vector,
+                          value_col = NULL,
                           group_by_col = NULL,
-                          knowns_treatment = "sum"){
+                          knowns_treatment = "count"){
 
   # load necessary complimentary packages
   if (!require("pacman")) install.packages("pacman")
@@ -32,6 +33,16 @@ prop_in_group <- function(input_df,
 
     # assign the group_by col
     group_by_col <- as.name("All")
+  }
+
+  #if there is no value column, this implies that the function should count rows rather than summing values. Therefore, create a column equal to one
+  if(missing(value_col)){
+
+    input_df <- input_df %>%
+      mutate(prop_group = 1)
+
+    # assign the group_by col
+    value_col <- as.name("prop_group")
   }
 
   # select the unique inputs in the group_by column

@@ -6,26 +6,29 @@
 \usage{
 prop_in_group(
   input_df,
-  value_col,
   breakdowns_vector,
+  value_col = NULL,
   group_by_col = NULL,
-  knowns_treatment = "sum"
+  knowns_treatment = "count"
 )
 }
 \arguments{
 \item{input_df}{an input data frame}
 
-\item{value_col}{the population values to be counted or summed}
-
 \item{breakdowns_vector}{a vector containing the column names of each group to see the proportion for}
+
+\item{value_col}{the population values to be summed. If the purpose is to count rows, leave this blank blank.}
 
 \item{group_by_col}{an additional layer of grouping, if required, to see a broader subset}
 
 \item{knowns_treatment}{inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column}
 }
 \value{
-The output from the function
+The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
 }
 \description{
-Summarise the proportions of a df (population) which fall in each of n categories
+produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
+}
+\seealso{
+[function documentation](https://github.com/tomambroseharris/THfuncs)
 }
