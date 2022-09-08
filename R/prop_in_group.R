@@ -90,9 +90,11 @@ prop_in_group <- function(input_df,
         pull()
 
       # extract a single number for the total UNKNOWN values
-      Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
+      Total_Value <- input_df %>%
         summarise(Total_value = sum({{value_col}})) %>%
         pull()
+
+      Char_Unknown <- Total_Value - Char_Total
 
     } else if (knowns_treatment == "count"){
 
@@ -102,9 +104,11 @@ prop_in_group <- function(input_df,
         pull()
 
       # extract a single number for the total UNKNOWN values
-      Char_Unknown <- input_df %>% filter(is.na(!!as.name(i))) %>%
+      Total_Value <- input_df %>%
         summarise(Total_value = nrow(.)) %>%
         pull()
+
+      Char_Unknown <- Total_Value - Char_Total
 
     } else {
       stop("Acceptable inputs for knowns_treatment are 'sum' or 'count'; the default is 'sum'.")
