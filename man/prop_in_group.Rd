@@ -2,7 +2,8 @@
 % Please edit documentation in R/prop_in_group.R
 \name{prop_in_group}
 \alias{prop_in_group}
-\title{Summarise the proportions of a df (population) which fall in each of n categories}
+\title{Summarise the proportions of a df (population) which fall in each of n categories
+Produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns}
 \usage{
 prop_in_group(
   input_df,
@@ -27,8 +28,9 @@ prop_in_group(
 The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
 }
 \description{
-produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
+Summarise the proportions of a df (population) which fall in each of n categories
+Produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
 }
 \seealso{
-function documentation at: (https://github.com/tomambroseharris/THfuncs)
+function documentation at: https://github.com/tomambroseharris/THfuncs
 }
