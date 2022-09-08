@@ -83,7 +83,7 @@ output_table <- prop_in_group(input_df = reformatted_iris,
 ```
 
 
-```{r}
+```{r, echo = FALSE}
 kableExtra::kbl(output_table, format = "pipe")
 
 ```
