@@ -35,11 +35,14 @@ iris <- iris %>% mutate(example_group = if_else(Petal.Length > 4, "long", "short
 ```
 
 The output looks like this
+
 ```{r, echo = FALSE, eval = TRUE}
 library(magrittr)
+library(kableExtra)
 iris_table <- tibble::tribble(~`Sepal.Length` ~`Sepal.Width` ~`Petal.Length` ~`Petal.Width`    ~`Species`,
 "1", "2", "3", "4", "5")
 
+iris_table %>% kableExtra::kbl(format = "pipe"
 ```
 
 ```{r, eval=FALSE}
