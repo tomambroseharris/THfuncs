@@ -1,4 +1,6 @@
 #' Summarise the proportions of a df (population) which fall in each of n categories
+#'
+#' @description produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
 #' @param input_df an input data frame
 #' @param breakdowns_vector a vector containing the column names of each group to see the proportion for
 #' @param value_col the population values to be summed. If the purpose is to count rows, leave this blank blank.
@@ -23,7 +25,7 @@ prop_in_group <- function(input_df,
                  tidyverse,
                  janitor)
 
-  #' Produce a summary table showing the proportion of a numeric column within groups and subgroups, which are assigned by the values in the corresponding row of other columns
+
 
   # if there is not an additional group_by column, create a column for all rows
   if(missing(group_by_col)){
