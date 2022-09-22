@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 library(devtools)
-devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
+#devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
 library(THfuncs)
 
 ```
@@ -23,7 +23,7 @@ library(THfuncs)
 
 # Purpose
 
-The THfuncs R packages houses functions created to help with data analysis, data manipulation and other functionality in R. 
+The THfuncs R packages house functions created to help with data analysis, data manipulation and other functionality in R. 
 
 The first (and currently only function) contained in this package is `prop_in_group()`. This function transforms tidy data into a grouped proportion table, using columns in the data. It can be generalised to summarise wide data frames, as shown in the example below. 
 
@@ -44,50 +44,124 @@ library(THfuncs)
 ## prop_in_group
 
 See what the function does by running: `?prop_in_group()`
-
-# Example use
-```{r, eval=FALSE}
-data("iris")
-iris
-iris <- iris %>% mutate(example_group = if_else(Petal.Length > 4, "long", "short"))
-
-```
-
-The output looks like this
-
-```{r, echo = FALSE, eval = TRUE}
-library(magrittr)
-library(kableExtra)
-library(dplyr)
-data("iris")
-reformatted_iris <- iris %>% mutate(example_group = if_else(Petal.Length > 4, "long", "short"))
-
-display_iris <- reformatted_iris %>%
-  slice_head(n = 5)
-
-
-display_iris %>% kableExtra::kbl(format = "pipe")
-```
-
-
-
-```{r, eval=TRUE}
-output_table <- prop_in_group(input_df = reformatted_iris,
-              value_col = Petal.Length,
-              breakdowns_vector = c("Species"),
-              group_by_col = example_group,
-              knowns_treatment = "count") 
-
-
-
-```
-
+The inputs are shown in `Usage`. There are defaults, which mean that the only  arguments necessary to specify are the `input_df` and `breakdowns_vector`. 
 
 ```{r, echo = FALSE}
-kableExtra::kbl(output_table, format = "pipe")
+library(knitr)
+
+knitr::include_graphics('Data/prop_in_group_screenshot.JPG')
+```
+
+# Example use
+
+We will use some dummy data on universities, shown below.
+
+```{r, echo = FALSE}
+# source: HESA 2020/21; PUBLISHED HE provider spine August 2022
+library(dplyr)
+library(kableExtra)
+universities <-read.csv("Data/dummy_data.csv", check.names = FALSE) %>% mutate_all(na_if,"") 
+
+kableExtra::kbl(universities, format = "pipe")
+```
+
+
+### Example 1. - Basic
+
+Showing the proportion of observations (rows) that have each breakdown.
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"))
 
 ```
 
 
-The proportion of total petal length that is contained in each species is split by the example group: short and long petal lengths, the mutate() assignment for which can be seen above. The breakdowns vector means that multiple different breakdowns can be included in a given table. These will be stacked on top of each other. The text in breakdowns_vector will be parsed to the grouping column, the unique values in that column will become the subgroup. There need be no group_by column. If there is none, the function will operate on the data frame as a whole. 
+```{r, echo=FALSE, eval=TRUE}
 
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819")),
+              format = "pipe")
+
+```
+
+**Notes:**
+*Only the rows for which the data points are known will be included in the calculation, therefore ensuring that the proportion sums to 1 within each grouping.*
+
+### Example 2a. - Proportion of student numbers
+
+Showing the proportion of observations (rows) that have each breakdown. SUM how much of the total is known.
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "sum")
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "sum"),
+              format = "pipe")
+
+```
+
+### Example 2b. - Proportion of student numbers
+
+Showing the proportion of observations (rows) that have each breakdown. COUNT how many rows have known values. (This is the default, as shown in example 1).
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count")
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count"),
+              format = "pipe")
+
+```
+
+### Example 3. - Dual breakdowns
+
+Now we will derive the proportion in each group split by the unique variables in the `Country` column.
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              group_by_col = Country,
+              knowns_treatment = "count")
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              group_by_col = Country,
+              knowns_treatment = "count"),
+              format = "pipe")
+
+```
+
+**Notes**
+*Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*

@@ -31,10 +31,10 @@ prop_in_group <- function(input_df,
   if(missing(group_by_col)){
 
     input_df <- input_df %>%
-      mutate(All = "All")
+      mutate(Proportion = "Proportion")
 
     # assign the group_by col
-    group_by_col <- as.name("All")
+    group_by_col <- as.name("Proportion")
   }
 
   #if there is no value column, this implies that the function should count rows rather than summing values. Therefore, create a column equal to one

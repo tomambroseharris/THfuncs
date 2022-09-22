@@ -3,7 +3,7 @@
 
 # Purpose
 
-The THfuncs R packages houses functions created to help with data
+The THfuncs R packages house functions created to help with data
 analysis, data manipulation and other functionality in R.
 
 The first (and currently only function) contained in this package is
@@ -11,7 +11,7 @@ The first (and currently only function) contained in this package is
 proportion table, using columns in the data. It can be generalised to
 summarise wide data frames, as shown in the example below.
 
-## Installation
+# Installation
 
 You can install the development version of THfuncs like so:
 
@@ -24,54 +24,125 @@ library(THfuncs)
 
 ## prop_in_group
 
-### See what the function does
+See what the function does by running: `?prop_in_group()` The inputs are
+shown in `Usage`. There are defaults, which mean that the only arguments
+necessary to specify are the `input_df` and `breakdowns_vector`.
 
-``` r
-?prop_in_group()
-```
+<img src="Data/prop_in_group_screenshot.JPG" width="100%" />
 
 # Example use
 
-``` r
-data("iris")
-iris
-iris <- iris %>% mutate(example_group = if_else(Petal.Length > 4, "long", "short"))
-```
+We will use some dummy data on universities, shown below.
 
-The output looks like this
+|    UKPRN | Name                                                  | Country  | Ofs_Tariff_1920       | TEF_1819 | Student numbers | Total Expenditure |
+|---------:|:------------------------------------------------------|:---------|:----------------------|:---------|----------------:|:------------------|
+| 10007814 | Cardiff University                                    | Wales    | NA                    | Silver   |           33510 | 573,201           |
+| 10007790 | The University of Edinburgh                           | Scotland | NA                    | No TEF   |           37830 | 1,060,066         |
+| 10007794 | The University of Glasgow                             | Scotland | NA                    | No TEF   |           37145 | 695,820           |
+| 10000291 | Anglia Ruskin University Higher Education Corporation | England  | HEIs with low scores  | Silver   |           32180 | 270,231           |
+| 10008640 | Falmouth University                                   | England  | Specialist HEI        | Gold     |            6170 | 64,303            |
+| 10007760 | Birkbeck College                                      | England  | Specialist HEI        | Silver   |           12070 | 106,783           |
+| 10007792 | University of Exeter                                  | England  | HEIs with high scores | Gold     |           30250 | 512,915           |
+| 10007799 | University of Newcastle upon Tyne                     | England  | HEIs with high scores | Gold     |           27775 | 530,603           |
+| 10007154 | University of Nottingham, the                         | England  | HEIs with high scores | Gold     |           35785 | 683,714           |
 
-| Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species | example_group |
-|-------------:|------------:|-------------:|------------:|:--------|:--------------|
-|          5.1 |         3.5 |          1.4 |         0.2 | setosa  | short         |
-|          4.9 |         3.0 |          1.4 |         0.2 | setosa  | short         |
-|          4.7 |         3.2 |          1.3 |         0.2 | setosa  | short         |
-|          4.6 |         3.1 |          1.5 |         0.2 | setosa  | short         |
-|          5.0 |         3.6 |          1.4 |         0.2 | setosa  | short         |
+### Example 1. - Basic
 
-``` r
-output_table <- prop_in_group(input_df = reformatted_iris,
-              value_col = Petal.Length,
-              breakdowns_vector = c("Species"),
-              group_by_col = example_group,
-              knowns_treatment = "count") 
-```
+Showing the proportion of observations (rows) that have each breakdown.
 
 ``` r
-kableExtra::kbl(output_table, format = "pipe")
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"))
 ```
 
-| Grouping | Subgroup   | short | long | Known in Group | Unknowns |
-|:---------|:-----------|------:|-----:|---------------:|---------:|
-| Species  | setosa     |  0.55 |   NA |            150 |        0 |
-| Species  | versicolor |  0.45 | 0.36 |            150 |        0 |
-| Species  | virginica  |    NA | 0.64 |            150 |        0 |
+| Grouping        | Subgroup              |  All | Known in Group | Unknowns |
+|:----------------|:----------------------|-----:|---------------:|---------:|
+| Country         | England               | 0.67 |              9 |        0 |
+| Country         | Scotland              | 0.22 |              9 |        0 |
+| Country         | Wales                 | 0.11 |              9 |        0 |
+| Ofs_Tariff_1920 | HEIs with high scores | 0.50 |              6 |        3 |
+| Ofs_Tariff_1920 | HEIs with low scores  | 0.17 |              6 |        3 |
+| Ofs_Tariff_1920 | Specialist HEI        | 0.33 |              6 |        3 |
+| TEF_1819        | Gold                  | 0.44 |              9 |        0 |
+| TEF_1819        | No TEF                | 0.22 |              9 |        0 |
+| TEF_1819        | Silver                | 0.33 |              9 |        0 |
 
-The proportion of total petal length that is contained in each species
-is split by the example group: short and long petal lengths, the
-mutate() assignment for which can be seen above. The breakdowns vector
-means that multiple different breakdowns can be included in a given
-table. These will be stacked on top of each other. The text in
-breakdowns_vector will be parsed to the grouping column, the unique
-values in that column will become the subgroup. There need be no
-group_by column. If there is none, the function will operate on the data
-frame as a whole.
+**Notes:** *Only the rows for which the data points are known will be
+included in the calculation, therefore ensuring that the proportion sums
+to 1 within each grouping.*
+
+### Example 2a. - Proportion of student numbers
+
+Showing the proportion of observations (rows) that have each breakdown.
+SUM how much of the total is known.
+
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "sum")
+```
+
+| Grouping        | Subgroup              |  All | Known in Group | Unknowns |
+|:----------------|:----------------------|-----:|---------------:|---------:|
+| Country         | England               | 0.57 |         252715 |        0 |
+| Country         | Scotland              | 0.30 |         252715 |        0 |
+| Country         | Wales                 | 0.13 |         252715 |        0 |
+| Ofs_Tariff_1920 | HEIs with high scores | 0.65 |         144230 |   108485 |
+| Ofs_Tariff_1920 | HEIs with low scores  | 0.22 |         144230 |   108485 |
+| Ofs_Tariff_1920 | Specialist HEI        | 0.13 |         144230 |   108485 |
+| TEF_1819        | Gold                  | 0.40 |         252715 |        0 |
+| TEF_1819        | No TEF                | 0.30 |         252715 |        0 |
+| TEF_1819        | Silver                | 0.31 |         252715 |        0 |
+
+### Example 2b. - Proportion of student numbers
+
+Showing the proportion of observations (rows) that have each breakdown.
+COUNT how many rows have known values. (This is the default, as shown in
+example 1).
+
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count")
+```
+
+| Grouping        | Subgroup              |  All | Known in Group | Unknowns |
+|:----------------|:----------------------|-----:|---------------:|---------:|
+| Country         | England               | 0.57 |              9 |        0 |
+| Country         | Scotland              | 0.30 |              9 |        0 |
+| Country         | Wales                 | 0.13 |              9 |        0 |
+| Ofs_Tariff_1920 | HEIs with high scores | 0.65 |              6 |        3 |
+| Ofs_Tariff_1920 | HEIs with low scores  | 0.22 |              6 |        3 |
+| Ofs_Tariff_1920 | Specialist HEI        | 0.13 |              6 |        3 |
+| TEF_1819        | Gold                  | 0.40 |              9 |        0 |
+| TEF_1819        | No TEF                | 0.30 |              9 |        0 |
+| TEF_1819        | Silver                | 0.31 |              9 |        0 |
+
+### Example 3. - Dual breakdowns
+
+Now we will derive the proportion in each group split by the unique
+variables in the `Country` column.
+
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              group_by_col = Country,
+              knowns_treatment = "count")
+```
+
+| Grouping | Subgroup | Wales | Scotland | England | Known in Group | Unknowns |
+|:---------|:---------|------:|---------:|--------:|---------------:|---------:|
+| TEF_1819 | Gold     |    NA |       NA |    0.69 |              9 |        0 |
+| TEF_1819 | No TEF   |    NA |        1 |      NA |              9 |        0 |
+| TEF_1819 | Silver   |     1 |       NA |    0.31 |              9 |        0 |
+
+**Notes** *Where there are no corresponding data in the original data
+frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA
+will be returned*

@@ -1,6 +1,6 @@
 Package: THfuncs
 Type: Package
-Title: Summarise the proportions of a df (population) which fall in each of n categories
+Title: Functions for data analysis and manipulation by Thomas Harris
 Version: 0.1.0
 Author: Tom Harris <tomambroseharris395@gmail.com>
 Maintainer: Tom Harris <tomambroseharris395@gmail.com>
