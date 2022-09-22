@@ -60,108 +60,11 @@ We will use some dummy data on universities, shown below.
 # source: HESA 2020/21; PUBLISHED HE provider spine August 2022
 library(dplyr)
 library(kableExtra)
-universities <-read.csv("Data/dummy_data.csv", check.names = FALSE) %>% mutate_all(na_if,"") 
+library(utils)
+universities <-read.csv("Data/dummy_data.csv", check.names = FALSE,
+                        header=TRUE, 
+           stringsAsFactors = FALSE) %>% mutate_all(na_if,"") 
 
 kableExtra::kbl(universities, format = "pipe")
 ```
 
-
-### Example 1. - Basic
-
-Showing the proportion of observations (rows) that have each breakdown.
-
-```{r, echo=TRUE, eval=FALSE}
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"))
-
-```
-
-
-```{r, echo=FALSE, eval=TRUE}
-
-kableExtra::kbl(prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819")),
-              format = "pipe")
-
-```
-
-**Notes:**
-*Only the rows for which the data points are known will be included in the calculation, therefore ensuring that the proportion sums to 1 within each grouping.*
-
-### Example 2a. - Proportion of student numbers
-
-Showing the proportion of observations (rows) that have each breakdown. SUM how much of the total is known.
-
-```{r, echo=TRUE, eval=FALSE}
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "sum")
-
-```
-
-
-```{r, echo=FALSE, eval=TRUE}
-
-kableExtra::kbl(prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "sum"),
-              format = "pipe")
-
-```
-
-### Example 2b. - Proportion of student numbers
-
-Showing the proportion of observations (rows) that have each breakdown. COUNT how many rows have known values. (This is the default, as shown in example 1).
-
-```{r, echo=TRUE, eval=FALSE}
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "count")
-
-```
-
-
-```{r, echo=FALSE, eval=TRUE}
-
-kableExtra::kbl(prop_in_group(input_df = universities,
-              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "count"),
-              format = "pipe")
-
-```
-
-### Example 3. - Dual breakdowns
-
-Now we will derive the proportion in each group split by the unique variables in the `Country` column.
-
-```{r, echo=TRUE, eval=FALSE}
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("TEF_1819"),
-              value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count")
-
-```
-
-
-```{r, echo=FALSE, eval=TRUE}
-
-kableExtra::kbl(prop_in_group(input_df = universities,
-              breakdowns_vector = c("TEF_1819"),
-              value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count"),
-              format = "pipe")
-
-```
-
-**Notes**
-*Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
