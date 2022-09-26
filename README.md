@@ -3,13 +3,13 @@
 
 # Purpose
 
-The THfuncs R packages house functions created to help with data
+The THfuncs R package contains functions created to help with data
 analysis, data manipulation and other functionality in R.
 
 The first (and currently only function) contained in this package is
 `prop_in_group()`. This function transforms tidy data into a grouped
 proportion table, using columns in the data. It can be generalised to
-summarise wide data frames, as shown in the example below.
+summarise wide data frames, as shown in the examples below.
 
 # Installation
 
@@ -122,6 +122,32 @@ prop_in_group(input_df = universities,
 | TEF_1819        | Gold           |       0.40 |              9 |        0 |
 | TEF_1819        | No TEF         |       0.30 |              9 |        0 |
 | TEF_1819        | Silver         |       0.31 |              9 |        0 |
+
+### Example 2c. - Rounded knowns
+
+Now we change the input parameter `round_knowns_to_nearest` from 1 (the
+default) to 5.
+
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count",
+              round_knowns_to_nearest = 5)
+```
+
+| Grouping        | Subgroup       | Proportion | Known in Group | Unknowns |
+|:----------------|:---------------|-----------:|---------------:|---------:|
+| Country         | England        |       0.57 |             10 |        0 |
+| Country         | Scotland       |       0.30 |             10 |        0 |
+| Country         | Wales          |       0.13 |             10 |        0 |
+| Ofs_Tariff_1920 | High Tariff    |       0.65 |              5 |        5 |
+| Ofs_Tariff_1920 | Low Tariff     |       0.22 |              5 |        5 |
+| Ofs_Tariff_1920 | Specialist HEI |       0.13 |              5 |        5 |
+| TEF_1819        | Gold           |       0.40 |             10 |        0 |
+| TEF_1819        | No TEF         |       0.30 |             10 |        0 |
+| TEF_1819        | Silver         |       0.31 |             10 |        0 |
 
 ### Example 3. - Dual breakdowns
 

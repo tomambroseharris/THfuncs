@@ -23,9 +23,9 @@ library(THfuncs)
 
 # Purpose
 
-The THfuncs R packages house functions created to help with data analysis, data manipulation and other functionality in R. 
+The THfuncs R package contains functions created to help with data analysis, data manipulation and other functionality in R. 
 
-The first (and currently only function) contained in this package is `prop_in_group()`. This function transforms tidy data into a grouped proportion table, using columns in the data. It can be generalised to summarise wide data frames, as shown in the example below. 
+The first (and currently only function) contained in this package is `prop_in_group()`. This function transforms tidy data into a grouped proportion table, using columns in the data. It can be generalised to summarise wide data frames, as shown in the examples below. 
 
 # Installation
 
@@ -152,6 +152,34 @@ kableExtra::kbl(prop_in_group(input_df = universities,
               format = "pipe")
 
 ```
+### Example 2c. - Rounded knowns
+
+Now we change the input parameter `round_knowns_to_nearest` from 1 (the default) to 5. 
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count",
+              round_knowns_to_nearest = 5)
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
+              value_col = `Student numbers`,
+              knowns_treatment = "count",
+              round_knowns_to_nearest = 5),
+              format = "pipe")
+
+```
+
+
+
 
 ### Example 3. - Dual breakdowns
 
@@ -183,30 +211,3 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 *Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
 
 
-### Example 3. - Dual breakdowns
-
-Now we will derive the proportion in each group split by the unique variables in the `Country` column.
-
-```{r, echo=TRUE, eval=FALSE}
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("TEF_1819"),
-              value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count",
-              round_knowns_to_nearest = 5)
-
-```
-
-
-```{r, echo=FALSE, eval=TRUE}
-
-kableExtra::kbl(prop_in_group(input_df = universities,
-              breakdowns_vector = c("TEF_1819"),
-              value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count",
-              round_knowns_to_nearest = 5),
-              format = "pipe")
-
-```
