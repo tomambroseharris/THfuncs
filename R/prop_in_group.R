@@ -6,6 +6,7 @@
 #' @param value_col the population values to be summed. If the purpose is to count rows, leave this blank blank.
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
+#' @param round_knowns_to_nearest the number to round the knowns/unknowns to e.g. 1,5,10
 #' @return The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
 #' @seealso function documentation at: https://github.com/tomambroseharris/THfuncs
 #' @export
@@ -15,7 +16,8 @@ prop_in_group <- function(input_df,
                           breakdowns_vector,
                           value_col = NULL,
                           group_by_col = NULL,
-                          knowns_treatment = "count"){
+                          knowns_treatment = "count",
+                          round_knowns_to_nearest = 1){
 
   # load necessary complimentary packages
   if (!require("pacman")) install.packages("pacman")
@@ -156,7 +158,8 @@ prop_in_group <- function(input_df,
     # for the first loop, binding_df will be empty at this stage
     # for each subsequent one, it will have the previous Char_Summary tables already bound above
     binding_df <- binding_df %>%
-      bind_rows(Char_Summary)
+      bind_rows(Char_Summary) %>%
+      mutate(across(c(`Known in Group`, `Unknowns`), ~ plyr::round_any(.x, round_knowns_to_nearest, f = round)))
 
   }
 
