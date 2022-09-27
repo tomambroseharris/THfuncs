@@ -239,3 +239,24 @@ prop_in_group(input_df = universities,
 | TEF_1819 | Gold     | 99980 |              9 |        0 |
 | TEF_1819 | No TEF   | 74975 |              9 |        0 |
 | TEF_1819 | Silver   | 77760 |              9 |        0 |
+
+### Example 7: transforming knowns and NAs
+
+Here is an example of how to get your unknown values into NA form. an
+easy way to do this is `dplyr::na_if()`. An example of the syntax to be
+applied is below.
+
+``` r
+
+
+output_df <- universities %>%
+   mutate(TEF_1819 = dplyr::na_if(TEF_1819, "No TEF")) %>%
+prop_in_group(breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              value_or_prop = "value")
+```
+
+| Grouping | Subgroup | Value | Known in Group | Unknowns |
+|:---------|:---------|------:|---------------:|---------:|
+| TEF_1819 | Gold     | 99980 |              7 |        2 |
+| TEF_1819 | Silver   | 77760 |              7 |        2 |

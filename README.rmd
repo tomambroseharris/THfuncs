@@ -288,5 +288,27 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 
 ```
 
+### Example 7: transforming knowns and NAs
 
+Here is an example of how to get your unknown values into NA form. an easy way to do this is `dplyr::na_if()`. An example of the syntax to be applied is below. 
+
+```{r, echo=TRUE, eval=TRUE}
+
+
+output_df <- universities %>%
+   mutate(TEF_1819 = dplyr::na_if(TEF_1819, "No TEF")) %>%
+prop_in_group(breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              value_or_prop = "value")
+
+```
+
+```{r, echo=FALSE, eval=TRUE}
+
+
+
+kableExtra::kbl(output_df,
+              format = "pipe")
+
+```
 
