@@ -160,7 +160,7 @@ prop_in_group <- function(input_df,
 
       Char_Summary <- Char_Summary %>%
         mutate_if(is.numeric, ~.[[row_total]]) %>%
-        filter(!!as.name(i) == "Total")
+        filter(!!as.name(i) != "Total")
 
     }  else {
       stop("Acceptable inputs for include_knowns are 'yes' or 'no'; the default is 'yes'.")

@@ -202,3 +202,7 @@ output_df <- universities %>%
 | Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |
 
 Test
+
+| Grouping | Subgroup | Wales | Scotland | England | Known in Group | Unknowns |
+|:---------|:---------|------:|---------:|--------:|---------------:|---------:|
+| TEF_1819 | Total    | 33510 |    74975 |  144230 |              9 |        0 |
