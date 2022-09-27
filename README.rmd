@@ -230,13 +230,12 @@ output_df <- universities %>%
 
 ```{r, echo=FALSE, eval=TRUE}
 
-# output_df <- universities %>%
-#   mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>%
-#   prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920")) %>%
-#   select(-`Known in Group`, `Unknowns`)
+
 
 kableExtra::kbl(output_df,
               format = "pipe")
 
 ```
+
+
 

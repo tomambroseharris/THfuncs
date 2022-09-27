@@ -32,7 +32,7 @@ prop_in_group <- function(input_df,
                  tidyverse,
                  janitor)
 
-
+  `%notin%` <- Negate(`%in%`)
 
   # if there is not an additional group_by column, create a column for all rows
   if(missing(group_by_col) && value_or_prop == "prop"){
@@ -50,7 +50,7 @@ prop_in_group <- function(input_df,
     # assign the group_by col
     group_by_col <- as.name("Value")
 
-  } else {
+  } else if (value_or_prop %notin% c("value", "prop")){
 
     stop("Acceptable inputs for value_or_prop are 'value' or 'prop'; the default is 'prop'.")
   }
