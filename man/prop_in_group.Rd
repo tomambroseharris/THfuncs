@@ -25,6 +25,8 @@ prop_in_group(
 
 \item{group_by_col}{an additional layer of grouping, if required, to see a broader subset}
 
+\item{value_or_prop}{default = "prop". Inputting "value" can generate a df with values instead of proportions}
+
 \item{prop_dps}{how many decimal places to make the proportion. The default is 2, representing a percentage with no decimals}
 
 \item{include_knowns}{whether to include a count or sum of NA values in the df. Default == "yes"}

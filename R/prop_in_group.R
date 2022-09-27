@@ -5,6 +5,7 @@
 #' @param breakdowns_vector a vector containing the column names of each group to see the proportion for
 #' @param value_col the population values to be summed. If the purpose is to count rows, leave this blank blank.
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
+#' @param value_or_prop default = "prop". Inputting "value" can generate a df with values instead of proportions
 #' @param prop_dps how many decimal places to make the proportion. The default is 2, representing a percentage with no decimals
 #' @param include_knowns whether to include a count or sum of NA values in the df. Default == "yes"
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
