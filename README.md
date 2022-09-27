@@ -190,8 +190,8 @@ assumes that the input data frame is that which is being manipulated.
 
 output_df <- universities %>%
   mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>%
-  prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920")) %>%
-  select(-`Known in Group`, -`Unknowns`)
+  prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920"),
+                include_knowns = "no") 
 ```
 
 | Grouping        | Subgroup       | Proportion |
