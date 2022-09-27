@@ -5,6 +5,7 @@
 #' @param breakdowns_vector a vector containing the column names of each group to see the proportion for
 #' @param value_col the population values to be summed. If the purpose is to count rows, leave this blank blank.
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
+#' @param prop_dps how many decimal places to make the proportion. The default is 2, representing a % with no decimals
 #' @param include_knowns whether to include a count or sum of NA values in the df. Default == "yes"
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
 #' @param round_knowns_to_nearest the number to round the knowns/unknowns to e.g. 1,5,10
@@ -17,6 +18,8 @@ prop_in_group <- function(input_df,
                           breakdowns_vector,
                           value_col = NULL,
                           group_by_col = NULL,
+                          value_or_prop = "prop",
+                          prop_dps = 2,
                           include_knowns = "yes",
                           knowns_treatment = "count",
                           round_knowns_to_nearest = 1){
@@ -32,13 +35,24 @@ prop_in_group <- function(input_df,
 
 
   # if there is not an additional group_by column, create a column for all rows
-  if(missing(group_by_col)){
+  if(missing(group_by_col) && value_or_prop == "prop"){
 
     input_df <- input_df %>%
       mutate(Proportion = "Proportion")
 
     # assign the group_by col
     group_by_col <- as.name("Proportion")
+  } else if (missing(group_by_col) && value_or_prop == "value"){
+
+    input_df <- input_df %>%
+      mutate(Value = "Value")
+
+    # assign the group_by col
+    group_by_col <- as.name("Value")
+
+  } else {
+
+    stop("Acceptable inputs for value_or_prop are 'value' or 'prop'; the default is 'prop'.")
   }
 
   #if there is no value column, this implies that the function should count rows rather than summing values. Therefore, create a column equal to one
@@ -133,11 +147,28 @@ prop_in_group <- function(input_df,
     # count the number of rows in Char_Summary
     row_total <- nrow(Char_Summary)
 
+
+    if(value_or_prop == "prop"){
+
     Char_Summary <- Char_Summary %>%
       # this creates percentages out of the numeric columns. It divides each row by the data in the nth row.
       # because we have counted the number of rows above, this will always be the total row
-      mutate_if(is.numeric, ~round(./.[[row_total]], 2)) %>%
-      filter(!!as.name(i) != "Total") %>% # remove the total row from the bottom of the df (this will have the value 1 in it, because it's just been divided by itself)
+      mutate_if(is.numeric, ~round(./.[[row_total]], prop_dps)) %>%
+      filter(!!as.name(i) != "Total")
+
+    } else if (value_or_prop == "value"){
+
+      Char_Summary <- Char_Summary %>%
+        mutate_if(is.numeric, .[[row_total]]) %>%
+        filter(!!as.name(i) == "Total")
+
+    }  else {
+      stop("Acceptable inputs for include_knowns are 'yes' or 'no'; the default is 'yes'.")
+
+}
+
+
+    Char_Summary <- Char_Summary  %>% # remove the total row from the bottom of the df (this will have the value 1 in it, because it's just been divided by itself)
       mutate(`Known in Group` = Char_Total, # add a known total row. Assign all rows the value extracted above: the total FPE when filtering out unknowns
              Unknowns = Char_Unknown, # do as above for unknowns
              Grouping = i)  # create a grouping column filled with whatever subgroup (i) is being grouped by in this loop
@@ -145,6 +176,8 @@ prop_in_group <- function(input_df,
     # count the number of columns in the summary table
     # this is identical to empty_df_ncols above, but do it again here because it's clearer
     col_numbers <- ncol(Char_Summary)
+
+
 
     # reorder the Char_Summary table
     Char_Summary <- Char_Summary %>%

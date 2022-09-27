@@ -9,6 +9,8 @@ prop_in_group(
   breakdowns_vector,
   value_col = NULL,
   group_by_col = NULL,
+  value_or_prop = "prop",
+  prop_dps = 2,
   include_knowns = "yes",
   knowns_treatment = "count",
   round_knowns_to_nearest = 1
@@ -22,6 +24,8 @@ prop_in_group(
 \item{value_col}{the population values to be summed. If the purpose is to count rows, leave this blank blank.}
 
 \item{group_by_col}{an additional layer of grouping, if required, to see a broader subset}
+
+\item{prop_dps}{how many decimal places to make the proportion. The default is 2, representing a % with no decimals}
 
 \item{include_knowns}{whether to include a count or sum of NA values in the df. Default == "yes"}
 
