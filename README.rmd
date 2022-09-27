@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 library(devtools)
-devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
+# devtools::install_github("tomambroseharris/THfuncs", force = TRUE)
 library(THfuncs)
 
 ```
@@ -160,8 +160,7 @@ Now we change the input parameter `round_knowns_to_nearest` from 1 (the default)
 
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "count",
+              value_col = `Student numbers`
               round_knowns_to_nearest = 5)
 
 ```
@@ -172,7 +171,6 @@ prop_in_group(input_df = universities,
 kableExtra::kbl(prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
               value_col = `Student numbers`,
-              knowns_treatment = "count",
               round_knowns_to_nearest = 5),
               format = "pipe")
 
@@ -190,8 +188,7 @@ Now we will derive the proportion in each group split by the unique variables in
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count")
+              group_by_col = Country)
 
 ```
 
@@ -201,8 +198,7 @@ prop_in_group(input_df = universities,
 kableExtra::kbl(prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count"),
+              group_by_col = Country),
               format = "pipe")
 
 ```
@@ -211,7 +207,7 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 *Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
 
 
-Example 4: rounding the proportion
+### Example 4: rounding the proportion
 
 The `prop_dps` argument allows you to change the accuracy of the proportions
 
@@ -220,8 +216,7 @@ The `prop_dps` argument allows you to change the accuracy of the proportions
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              prop_dps = 4,
-              knowns_treatment = "count")
+              prop_dps = 4)
 
 ```
 
@@ -231,8 +226,7 @@ prop_in_group(input_df = universities,
 kableExtra::kbl(prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              prop_dps = 4,
-              knowns_treatment = "count"),
+              prop_dps = 4),
               format = "pipe")
 
 ```
@@ -268,15 +262,18 @@ kableExtra::kbl(output_df,
 
 
 
-Example 6: values not proportions
+### Example 6: Summed values not proportions
+
+The function can be changed to sum the value column (or count instances if no `value_col` is parsed). This option creates an entirely different df rather than adding to the existing df because of issues when more than one grouping column are included. To get them alongside, you'd have to run the function twice and join them.
+
+
 
 ```{r, echo=TRUE, eval=FALSE}
 
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              value_or_prop = "value",
-              knowns_treatment = "count")
+              value_or_prop = "value")
 
 ```
 
@@ -287,8 +284,7 @@ prop_in_group(input_df = universities,
 kableExtra::kbl(prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              value_or_prop = "value",
-              knowns_treatment = "count"),
+              value_or_prop = "value"),
               format = "pipe")
 
 ```

@@ -132,8 +132,7 @@ default) to 5.
 
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
-              value_col = `Student numbers`,
-              knowns_treatment = "count",
+              value_col = `Student numbers`
               round_knowns_to_nearest = 5)
 ```
 
@@ -159,8 +158,7 @@ variables in the `Country` column.
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              group_by_col = Country,
-              knowns_treatment = "count")
+              group_by_col = Country)
 ```
 
 | Grouping | Subgroup | Wales | Scotland | England | Known in Group | Unknowns |
@@ -173,7 +171,7 @@ prop_in_group(input_df = universities,
 frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA
 will be returned*
 
-Example 4: rounding the proportion
+### Example 4: rounding the proportion
 
 The `prop_dps` argument allows you to change the accuracy of the
 proportions
@@ -183,8 +181,7 @@ proportions
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              prop_dps = 4,
-              knowns_treatment = "count")
+              prop_dps = 4)
 ```
 
 | Grouping | Subgroup | Proportion | Known in Group | Unknowns |
@@ -221,19 +218,24 @@ output_df <- universities %>%
 | Ofs_Tariff_1920 | Specialist HEI |       0.22 |
 | Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |
 
-Example 6: values not proportions
+### Example 6: Summed values not proportions
+
+The function can be changed to sum the value column (or count instances
+if no `value_col` is parsed). This option creates an entirely different
+df rather than adding to the existing df because of issues when more
+than one grouping column are included. To get them alongside, you’d have
+to run the function twice and join them.
 
 ``` r
 
 prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
-              value_or_prop = "value",
-              knowns_treatment = "count")
+              value_or_prop = "value")
 ```
 
-| Grouping | Subgroup |  Value | Known in Group | Unknowns |
-|:---------|:---------|-------:|---------------:|---------:|
-| TEF_1819 | Gold     | 252715 |              9 |        0 |
-| TEF_1819 | No TEF   | 252715 |              9 |        0 |
-| TEF_1819 | Silver   | 252715 |              9 |        0 |
+| Grouping | Subgroup | Value | Known in Group | Unknowns |
+|:---------|:---------|------:|---------------:|---------:|
+| TEF_1819 | Gold     | 99980 |              9 |        0 |
+| TEF_1819 | No TEF   | 74975 |              9 |        0 |
+| TEF_1819 | Silver   | 77760 |              9 |        0 |
