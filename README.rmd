@@ -211,7 +211,36 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 *Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
 
 
-### Example 4. - Minimalist table without knowns and within pipe
+Example 4: rounding the proportion
+
+The `prop_dps` argument allows you to change the accuracy of the proportions
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              prop_dps = 4,
+              knowns_treatment = "count")
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              prop_dps = 4,
+              knowns_treatment = "count"),
+              format = "pipe")
+
+```
+
+
+
+
+### Example 5. - Minimalist table without knowns and within pipe
 
 This table summarises the proportion of universities in each tariff group. Instead of ignoring NA values, we can reassign these values such that they are included in the proportion calculation. If this is the case, we might as well remove the `Known in Group` and `Unknowns` columns (because these would be Known = 9 and Unknowns = 0 in each instance).
 
@@ -238,7 +267,18 @@ kableExtra::kbl(output_df,
 ```
 
 
-Test
+
+Example 6: values not proportions
+
+```{r, echo=TRUE, eval=FALSE}
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              value_or_prop = "value",
+              knowns_treatment = "count")
+
+```
 
 ```{r, echo=FALSE, eval=TRUE}
 
@@ -248,7 +288,6 @@ kableExtra::kbl(prop_in_group(input_df = universities,
               breakdowns_vector = c("TEF_1819"),
               value_col = `Student numbers`,
               value_or_prop = "value",
-              group_by_col = Country,
               knowns_treatment = "count"),
               format = "pipe")
 

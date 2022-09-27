@@ -173,7 +173,27 @@ prop_in_group(input_df = universities,
 frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA
 will be returned*
 
-### Example 4. - Minimalist table without knowns and within pipe
+Example 4: rounding the proportion
+
+The `prop_dps` argument allows you to change the accuracy of the
+proportions
+
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              prop_dps = 4,
+              knowns_treatment = "count")
+```
+
+| Grouping | Subgroup | Proportion | Known in Group | Unknowns |
+|:---------|:---------|-----------:|---------------:|---------:|
+| TEF_1819 | Gold     |     0.3956 |              9 |        0 |
+| TEF_1819 | No TEF   |     0.2967 |              9 |        0 |
+| TEF_1819 | Silver   |     0.3077 |              9 |        0 |
+
+### Example 5. - Minimalist table without knowns and within pipe
 
 This table summarises the proportion of universities in each tariff
 group. Instead of ignoring NA values, we can reassign these values such
@@ -201,10 +221,19 @@ output_df <- universities %>%
 | Ofs_Tariff_1920 | Specialist HEI |       0.22 |
 | Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |
 
-Test
+Example 6: values not proportions
 
-| Grouping | Subgroup | Wales | Scotland | England | Known in Group | Unknowns |
-|:---------|:---------|------:|---------:|--------:|---------------:|---------:|
-| TEF_1819 | Gold     | 33510 |    74975 |  144230 |              9 |        0 |
-| TEF_1819 | No TEF   | 33510 |    74975 |  144230 |              9 |        0 |
-| TEF_1819 | Silver   | 33510 |    74975 |  144230 |              9 |        0 |
+``` r
+
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              value_or_prop = "value",
+              knowns_treatment = "count")
+```
+
+| Grouping | Subgroup |  Value | Known in Group | Unknowns |
+|:---------|:---------|-------:|---------------:|---------:|
+| TEF_1819 | Gold     | 252715 |              9 |        0 |
+| TEF_1819 | No TEF   | 252715 |              9 |        0 |
+| TEF_1819 | Silver   | 252715 |              9 |        0 |
