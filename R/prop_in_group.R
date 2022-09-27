@@ -7,7 +7,7 @@
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
 #' @param value_or_prop default = "prop". Inputting "value" can generate a df with values instead of proportions
 #' @param prop_dps how many decimal places to make the proportion. The default is 2, representing a percentage with no decimals
-#' @param include_knowns whether to include a count or sum of NA values in the df. Default == "yes"
+#' @param include_knowns whether to include a count or sum of NA values in the df. Default = "yes"
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
 #' @param round_knowns_to_nearest the number to round the knowns/unknowns to e.g. 1,5,10
 #' @return The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
@@ -104,7 +104,7 @@ prop_in_group <- function(input_df,
     if(knowns_treatment == "sum"){
 
       # extract a single number for the total KNOWN values
-      Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
+      Char_Total <- input_df %>% filter(!is.na(!!as.name(i))) %>% # !!as.name() calls the object associated with the character string, i, this will be a column
         summarise(Total_value = sum({{value_col}})) %>%
         pull()
 
@@ -118,7 +118,7 @@ prop_in_group <- function(input_df,
     } else if (knowns_treatment == "count"){
 
       # extract a single number for the total KNOWN values
-      Char_Total <- input_df %>% filter(!!as.name(i) != "Unknown") %>% # !!as.name() calls the object associated with the character string, i, this will be a column
+      Char_Total <- input_df %>% filter(!is.na(!!as.name(i))) %>% # !!as.name() calls the object associated with the character string, i, this will be a column
         summarise(Total_value = nrow(.)) %>%
         pull()
 

@@ -20,7 +20,6 @@ library(THfuncs)
 # THfuncs
 
 
-
 # Purpose
 
 The THfuncs R package contains functions created to help with data analysis, data manipulation and other functionality in R. 
