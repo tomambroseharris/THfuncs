@@ -9,6 +9,7 @@ prop_in_group(
   breakdowns_vector,
   value_col = NULL,
   group_by_col = NULL,
+  include_knowns = "yes",
   knowns_treatment = "count",
   round_knowns_to_nearest = 1
 )
@@ -21,6 +22,8 @@ prop_in_group(
 \item{value_col}{the population values to be summed. If the purpose is to count rows, leave this blank blank.}
 
 \item{group_by_col}{an additional layer of grouping, if required, to see a broader subset}
+
+\item{include_knowns}{whether to include a count or sum of NA values in the df. Default == "yes"}
 
 \item{knowns_treatment}{inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column}
 
