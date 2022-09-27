@@ -200,3 +200,5 @@ output_df <- universities %>%
 | Ofs_Tariff_1920 | Low Tariff     |       0.11 |
 | Ofs_Tariff_1920 | Specialist HEI |       0.22 |
 | Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |
+
+Test

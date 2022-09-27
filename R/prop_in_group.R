@@ -159,7 +159,7 @@ prop_in_group <- function(input_df,
     } else if (value_or_prop == "value"){
 
       Char_Summary <- Char_Summary %>%
-        mutate_if(is.numeric, .[[row_total]]) %>%
+        mutate_if(is.numeric, ~.[[row_total]]) %>%
         filter(!!as.name(i) == "Total")
 
     }  else {

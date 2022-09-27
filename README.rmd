@@ -238,4 +238,21 @@ kableExtra::kbl(output_df,
 ```
 
 
+Test
+
+```{r, echo=FALSE, eval=TRUE}
+
+
+
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              value_or_prop = "value",
+              group_by_col = Country,
+              knowns_treatment = "count"),
+              format = "pipe")
+
+```
+
+
 
