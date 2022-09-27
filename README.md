@@ -172,3 +172,31 @@ prop_in_group(input_df = universities,
 **Notes** *Where there are no corresponding data in the original data
 frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA
 will be returned*
+
+### Example 4. - Minimalist table without knowns and within pipe
+
+This table summarises the proportion of universities in each tariff
+group. Instead of ignoring NA values, we can reassign these values such
+that they are included in the proportion calculation. If this is the
+case, we might as well remove the `Known in Group` and `Unknowns`
+columns (because these would be Known = 9 and Unknowns = 0 in each
+instance).
+
+This table also shows how the function can be nested within a pipe: it
+assumes that the input data frame is that which is being manipulated.
+
+``` r
+
+
+output_df <- universities %>%
+  mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>%
+  prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920")) %>%
+  select(-`Known in Group`, -`Unknowns`)
+```
+
+| Grouping        | Subgroup       | Proportion |
+|:----------------|:---------------|-----------:|
+| Ofs_Tariff_1920 | High Tariff    |       0.33 |
+| Ofs_Tariff_1920 | Low Tariff     |       0.11 |
+| Ofs_Tariff_1920 | Specialist HEI |       0.22 |
+| Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |

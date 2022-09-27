@@ -161,6 +161,18 @@ prop_in_group <- function(input_df,
       bind_rows(Char_Summary) %>%
       mutate(across(c(`Known in Group`, `Unknowns`), ~ plyr::round_any(.x, round_knowns_to_nearest, f = round)))
 
+      if(include_knowns == "yes"){
+      NULL
+    } else if (include_knowns == "no"){
+
+      binding_df <- binding_df %>%
+        select(-`Known in Group`, -`Unknowns`)
+
+    }  else {
+       stop("Acceptable inputs for include_knowns are 'yes' or 'no'; the default is 'yes'.")
+
+    }
+
   }
 
   return(binding_df)
