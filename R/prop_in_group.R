@@ -140,7 +140,7 @@ prop_in_group <- function(input_df,
     # create a summary table for the subgroup i
     Char_Summary <- input_df %>%
       filter(!is.na(!!as.name(i))) %>% # remove unknowns
-      mutate(group_by_col = as.character(group_by_col)) %>% # numeric values cannot be assigned as column names
+      mutate({{group_by_col}} := as.character({{group_by_col}})) %>% # numeric values cannot be assigned as column names
       group_by(!!as.name(i), {{group_by_col}}) %>% # group by the subgroup (i) and the grouping column defined in the function
       summarise(Total = sum({{value_col}}), .groups = "drop") %>% # summarise the total FPE in those characteristics
       pivot_wider(names_from = all_of(pivot_col), values_from = "Total") %>% #pivot wider, leaving the characteristics as a column and creating new columns out of all the unique variables in the group_col
