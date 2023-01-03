@@ -1,7 +1,11 @@
 
-# THfuncs
+<!-- badges: start -->
 
-# Purpose
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+# THfuncs
 
 The THfuncs R package contains functions created to help with data
 analysis, data manipulation and other functionality in R.
