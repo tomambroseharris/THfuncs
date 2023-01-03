@@ -207,6 +207,7 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 
 **Notes**
 *Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
+*the `Known in Group` column refers to the subgroup data (TEF_1819) rather than the country data, i.e. all the universities had a TEF rating but there were some countries which didn't have any universities that matched the TEF rating in the subgroup row.*l
 
 
 ### Example 4: rounding the proportion
