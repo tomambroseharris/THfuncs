@@ -185,25 +185,25 @@ kableExtra::kbl(prop_in_group(input_df = universities,
 
 Now we will derive the proportion in each group split by the unique variables in the `Country` column. Grouping
 
-<!-- ```{r, echo=TRUE, eval=FALSE} -->
+```{r, echo=TRUE, eval=FALSE}
 
-<!-- prop_in_group(input_df = universities, -->
-<!--               breakdowns_vector = c("TEF_1819"), -->
-<!--               value_col = `Student numbers`, -->
-<!--               group_by_col = Country) -->
+prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              group_by_col = Country)
 
-<!-- ``` -->
+```
 
 
-<!-- ```{r, echo=FALSE, eval=TRUE} -->
+```{r, echo=FALSE, eval=TRUE}
 
-<!-- kableExtra::kbl(prop_in_group(input_df = universities, -->
-<!--               breakdowns_vector = c("TEF_1819"), -->
-<!--               value_col = `Student numbers`, -->
-<!--               group_by_col = Country), -->
-<!--               format = "pipe") -->
+kableExtra::kbl(prop_in_group(input_df = universities,
+              breakdowns_vector = c("TEF_1819"),
+              value_col = `Student numbers`,
+              group_by_col = Country),
+              format = "pipe")
 
-<!-- ``` -->
+```
 
 **Notes**
 *Where there are no corresponding data in the original data frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA will be returned*
@@ -242,25 +242,25 @@ This table summarises the proportion of universities in each tariff group. Inste
 
 This table also shows how the function can be nested within a pipe: it assumes that the input data frame is that which is being manipulated.  
 
-<!-- ```{r, echo=TRUE, eval=TRUE} -->
+```{r, echo=TRUE, eval=TRUE}
 
 
-<!-- output_df <- universities %>% -->
-<!--   mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>% -->
-<!--   prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920"), -->
-<!--                 show_knowns_cols = "no")  -->
+output_df <- universities %>%
+  mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>%
+  prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920"),
+                show_knowns_cols = "no")
 
-<!-- ``` -->
-
-
-<!-- ```{r, echo=FALSE, eval=TRUE} -->
+```
 
 
+```{r, echo=FALSE, eval=TRUE}
 
-<!-- kableExtra::kbl(output_df, -->
-<!--               format = "pipe") -->
 
-<!-- ``` -->
+
+kableExtra::kbl(output_df,
+              format = "pipe")
+
+```
 
 
 
