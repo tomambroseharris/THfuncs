@@ -7,7 +7,7 @@
 #' @param group_by_col an additional layer of grouping, if required, to see a broader subset
 #' @param value_or_prop default = "prop". Inputting "value" can generate a df with values instead of proportions
 #' @param prop_dps how many decimal places to make the proportion. The default is 2, representing a percentage with no decimals
-#' @param include_knowns whether to include a count or sum of NA values in the df. Default = "yes"
+#' @param show_knowns_cols whether to show the cols with count or sum of NA values in the df. Default = "yes"
 #' @param knowns_treatment inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column
 #' @param round_knowns_to_nearest the number to round the knowns/unknowns to e.g. 1,5,10
 #' @return The output from the function - a data frame with 5+ columns: grouping (containing each element in the breakdowns vector); subgroup (containing each unique value within each grouping); a column per group_by_col unique value, if none, this will just be the prop_in_total_group; how many rows had known values; and how many unknowns there were
@@ -21,7 +21,7 @@ prop_in_group <- function(input_df,
                           group_by_col = NULL,
                           value_or_prop = "prop",
                           prop_dps = 2,
-                          include_knowns = "yes",
+                          show_knowns_cols = "yes",
                           knowns_treatment = "count",
                           round_knowns_to_nearest = 1){
 
@@ -164,7 +164,7 @@ prop_in_group <- function(input_df,
         filter(!!as.name(i) != "Total")
 
     }  else {
-      stop("Acceptable inputs for include_knowns are 'yes' or 'no'; the default is 'yes'.")
+      stop("Acceptable inputs for value_or_prop are 'prop' or 'value'; the default is 'prop'.")
 
 }
 
@@ -197,15 +197,15 @@ prop_in_group <- function(input_df,
       bind_rows(Char_Summary) %>%
       mutate(across(c(`Known in Group`, `Unknowns`), ~ plyr::round_any(.x, round_knowns_to_nearest, f = round)))
 
-      if(include_knowns == "yes"){
+      if(show_knowns_cols == "yes"){
       NULL
-    } else if (include_knowns == "no"){
+    } else if (show_knowns_cols == "no"){
 
       binding_df <- binding_df %>%
         select(-`Known in Group`, -`Unknowns`)
 
     }  else {
-       stop("Acceptable inputs for include_knowns are 'yes' or 'no'; the default is 'yes'.")
+       stop("Acceptable inputs for show_knowns_cols are 'yes' or 'no'; the default is 'yes'.")
 
     }
 

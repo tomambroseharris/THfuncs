@@ -28,7 +28,28 @@ See what the function does by running: `?prop_in_group()` The inputs are
 shown in `Usage`. There are defaults, which mean that the only arguments
 necessary to specify are the `input_df` and `breakdowns_vector`.
 
-<img src="Data/prop_in_group_screenshot.JPG" width="100%" />
+The function takes a data frame and summarises how values within the
+whole data frame are split between various groups. The function’s
+flexibility enables this to take many forms, it also allows users to
+account for things including: NA (unknown) values; whether the data are
+to be counted in instances or whether they already have attributed
+numeric values; multiple groups and subgroups; and stacking groups.
+
+The function produces a data frame with 5 core columns:
+
+- **Grouping** - the overarching data group: a column name in the
+  original df
+- **Subgroup** - the labels within the overarching group: unique inputs
+  in the grouping col from the original df
+- **Proportion** - the proportion of the overall value made up by that
+  subgroup
+- **Known in Group** - how many non-NA values were included in the
+  calculation
+- **Unknowns** - how many NA values were excluded from the calculation
+
+The number of columns will vary if multiple subgroups are incorporated
+or if users choose to deselect the knowns columns. These are included by
+default because they aid understanding of the function.
 
 # Example use
 
@@ -51,7 +72,6 @@ We will use some dummy data on universities, shown below.
 Showing the proportion of observations (rows) that have each breakdown.
 
 ``` r
-
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"))
 ```
@@ -69,8 +89,10 @@ prop_in_group(input_df = universities,
 | TEF_1819        | Silver         |       0.33 |              9 |        0 |
 
 **Notes:** *Only the rows for which the data points are known will be
-included in the calculation, therefore ensuring that the proportion sums
-to 1 within each grouping.*
+included in the calculation, this ensures that the proportion sums to 1
+within each grouping.* *Because there are 9 observations, the
+`Known in Group` and `Unknowns` columns will sum to 9, depending on
+whether the subgroup value contains data or is an NA*
 
 ### Example 2a. - Proportion of student numbers
 
@@ -78,7 +100,6 @@ Showing the proportion of observations (rows) that have each breakdown.
 SUM how much of the total is known.
 
 ``` r
-
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
               value_col = `Student numbers`,
@@ -104,12 +125,15 @@ COUNT how many rows have known values. (This is the default, as shown in
 example 1).
 
 ``` r
-
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
               value_col = `Student numbers`,
               knowns_treatment = "count")
 ```
+
+**Notes** *The proportion of student numbers is still the same as in 2a,
+because the calculation is still the same. All that has changed is the
+presentation of how many of the rows contain known values*
 
 | Grouping        | Subgroup       | Proportion | Known in Group | Unknowns |
 |:----------------|:---------------|-----------:|---------------:|---------:|
@@ -126,10 +150,10 @@ prop_in_group(input_df = universities,
 ### Example 2c. - Rounded knowns
 
 Now we change the input parameter `round_knowns_to_nearest` from 1 (the
-default) to 5.
+default) to 5. This can help to produce tables that comply with rounding
+rules or presentation intentions.
 
 ``` r
-
 prop_in_group(input_df = universities,
               breakdowns_vector = c("Country", "Ofs_Tariff_1920", "TEF_1819"),
               value_col = `Student numbers`
@@ -151,21 +175,21 @@ prop_in_group(input_df = universities,
 ### Example 3. - Dual breakdowns
 
 Now we will derive the proportion in each group split by the unique
-variables in the `Country` column.
+variables in the `Country` column. Grouping
 
-``` r
-
-prop_in_group(input_df = universities,
-              breakdowns_vector = c("TEF_1819"),
-              value_col = `Student numbers`,
-              group_by_col = Country)
-```
-
-| Grouping | Subgroup | Wales | Scotland | England | Known in Group | Unknowns |
-|:---------|:---------|------:|---------:|--------:|---------------:|---------:|
-| TEF_1819 | Gold     |    NA |       NA |    0.69 |              9 |        0 |
-| TEF_1819 | No TEF   |    NA |        1 |      NA |              9 |        0 |
-| TEF_1819 | Silver   |     1 |       NA |    0.31 |              9 |        0 |
+<!-- ```{r, echo=TRUE, eval=FALSE} -->
+<!-- prop_in_group(input_df = universities, -->
+<!--               breakdowns_vector = c("TEF_1819"), -->
+<!--               value_col = `Student numbers`, -->
+<!--               group_by_col = Country) -->
+<!-- ``` -->
+<!-- ```{r, echo=FALSE, eval=TRUE} -->
+<!-- kableExtra::kbl(prop_in_group(input_df = universities, -->
+<!--               breakdowns_vector = c("TEF_1819"), -->
+<!--               value_col = `Student numbers`, -->
+<!--               group_by_col = Country), -->
+<!--               format = "pipe") -->
+<!-- ``` -->
 
 **Notes** *Where there are no corresponding data in the original data
 frame (e.g., No Welsh universities in the df were TEF_1819 = Gold), NA
@@ -202,21 +226,16 @@ instance).
 This table also shows how the function can be nested within a pipe: it
 assumes that the input data frame is that which is being manipulated.
 
-``` r
-
-
-output_df <- universities %>%
-  mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>%
-  prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920"),
-                include_knowns = "no") 
-```
-
-| Grouping        | Subgroup       | Proportion |
-|:----------------|:---------------|-----------:|
-| Ofs_Tariff_1920 | High Tariff    |       0.33 |
-| Ofs_Tariff_1920 | Low Tariff     |       0.11 |
-| Ofs_Tariff_1920 | Specialist HEI |       0.22 |
-| Ofs_Tariff_1920 | UNKNOWN TARIFF |       0.33 |
+<!-- ```{r, echo=TRUE, eval=TRUE} -->
+<!-- output_df <- universities %>% -->
+<!--   mutate(Ofs_Tariff_1920 = if_else(is.na(Ofs_Tariff_1920), "UNKNOWN TARIFF", Ofs_Tariff_1920)) %>% -->
+<!--   prop_in_group(breakdowns_vector = c("Ofs_Tariff_1920"), -->
+<!--                 show_knowns_cols = "no")  -->
+<!-- ``` -->
+<!-- ```{r, echo=FALSE, eval=TRUE} -->
+<!-- kableExtra::kbl(output_df, -->
+<!--               format = "pipe") -->
+<!-- ``` -->
 
 ### Example 6: Summed values not proportions
 

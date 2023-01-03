@@ -11,7 +11,7 @@ prop_in_group(
   group_by_col = NULL,
   value_or_prop = "prop",
   prop_dps = 2,
-  include_knowns = "yes",
+  show_knowns_cols = "yes",
   knowns_treatment = "count",
   round_knowns_to_nearest = 1
 )
@@ -29,7 +29,7 @@ prop_in_group(
 
 \item{prop_dps}{how many decimal places to make the proportion. The default is 2, representing a percentage with no decimals}
 
-\item{include_knowns}{whether to include a count or sum of NA values in the df. Default = "yes"}
+\item{show_knowns_cols}{whether to show the cols with count or sum of NA values in the df. Default = "yes"}
 
 \item{knowns_treatment}{inlcude "sum" or "count" to specify how to calculate the unknowns/known instances column}
 
